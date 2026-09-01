@@ -2,3 +2,8 @@ email: madison.austin@fora.travel
 phone: 1 (334) 707-0212
 name: Madison Austin
 brand: Your Lucky Day
+website: yourluckyday.travel
+tiktok: https://www.tiktok.com/@yourluckyday.travel
+instagram: https://www.instagram.com/yourluckyday.travel/
+facebook: https://www.facebook.com/yourluckydaytravel
+amazon storefront: https://www.amazon.com/shop/maddiedeluxe/list/2HSZIK10B94NE?ref_=aip_sf_list_spv_ons_mixed_d
