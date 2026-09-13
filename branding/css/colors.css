@@ -21,7 +21,7 @@ a:hover { color: var(--color-rust); }
 .skip-link { position: absolute; left: 1rem; top: -6rem; z-index: 20; padding: .6rem 1rem; background: var(--color-gold); }
 .skip-link:focus { top: 1rem; }
 .header-banner { padding: .42rem; background: var(--color-night); color: var(--color-paper); font-size: .61rem; letter-spacing: .18em; text-transform: uppercase; text-align: center; }
-.header-banner-item + .header-banner-item::before { content: '✦'; color: var(--color-gold); margin-inline: 1.5rem; }
+.header-banner-item + .header-banner-item::before { content: ""; display: inline-block; width: .65rem; height: .65rem; background: var(--color-gold); margin-inline: 1.5rem; vertical-align: middle; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m12%202%203%207%207%203-7%203-3%207-3-7-7-3%207-3Z%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat; }
 .custom-navbar { background: var(--color-paper); border-bottom: 1px solid var(--line); }
 .navbar-brand { text-decoration: none; }
 .brand-wordmark { display: inline-block; color: var(--color-gold); text-shadow: 1px 2px 0 var(--color-rust); font: italic bold 1.8rem/1.05 var(--font-display); }
@@ -65,7 +65,7 @@ a:hover { color: var(--color-rust); }
 .service-description { color: #4f6267; font-size: .95rem; }
 .service-list { margin-top: auto; padding-top: 1rem; border-top: 1px dashed var(--line); }
 .service-list li { margin-top: .5rem; font-size: .8rem; }
-.service-list li::before { content: '↗'; margin-right: .6rem; color: var(--color-rust); }
+.service-list li::before { content: ""; display: inline-block; width: .85rem; height: .85rem; margin-right: .6rem; background: var(--color-rust); vertical-align: -.1em; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M5%2019%2019%205M5%205h14v14%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat; }
 .services-link,.links-home { font-size: .75rem; letter-spacing: .1em; font-weight: 700; text-transform: uppercase; text-decoration-color: var(--color-rust); }
 .destination-showcase { position: relative; isolation: isolate; overflow: hidden; margin-top: 0; background: var(--color-mist); border-block: 1px solid var(--line); }
 .destination-heading { font-size: clamp(2rem,4vw,3.2rem); line-height: 1.1; }
@@ -206,8 +206,10 @@ a:hover { color: var(--color-rust); }
 .faq-item summary::-webkit-details-marker { display: none; }
 .faq-item summary:hover, .faq-item[open] summary { background: var(--color-mist); }
 .faq-toggle { display: grid; place-items: center; flex: 0 0 1.8rem; height: 1.8rem; background: var(--color-gold); color: var(--color-ink); font: 1.3rem/1 Arial,sans-serif; }
-.faq-toggle::before { content: '+'; }
-.faq-item[open] .faq-toggle::before { content: '−'; }
+.faq-toggle { position: relative; }
+.faq-toggle::before, .faq-toggle::after { content: ""; position: absolute; width: .7rem; height: 2px; background: currentColor; }
+.faq-toggle::after { transform: rotate(90deg); }
+.faq-item[open] .faq-toggle::after { display: none; }
 .faq-answer { padding: 1.25rem 1.5rem 1.5rem; color: #40575e; overflow-wrap: anywhere; }
 .faq-answer p { margin: 0; }
 .faq-contact { background: var(--color-mist); border-top: 4px solid var(--color-gold); }
@@ -217,3 +219,8 @@ a:hover { color: var(--color-rust); }
  .faq-item summary { padding: 1.1rem; font-size: 1.1rem; }
  .faq-answer { padding: 1.1rem; }
 }
+
+/* Vector icons prevent platform-dependent emoji rendering. */
+.site-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -.12em; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.link-tree-icon .site-icon { width: 1.2rem; height: 1.2rem; }
+.travel-note > span { display: flex; flex-shrink: 0; }
