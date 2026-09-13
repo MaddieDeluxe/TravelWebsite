@@ -190,3 +190,30 @@ a:hover { color: var(--color-rust); }
  .contact-section { padding-bottom: 8rem !important; }
  .contact-camera { width: 6rem; right: .75rem; }
 }
+
+/* FAQ page shares the site's paper, mountain, and golden-yellow identity. */
+.custom-navbar .nav-link[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--color-rust); text-underline-offset: .4rem; }
+.faq-hero { position: relative; overflow: hidden; padding: 4rem 1rem; background: linear-gradient(rgba(244,241,233,.5),rgba(219,232,232,.7)), url('../assets/mountain%20background.jpg') center 40%/cover; }
+.faq-hero h1 { font-size: clamp(2.8rem,5.5vw,4.8rem); line-height: 1.05; letter-spacing: -.04em; }
+.faq-hero h1 em { color: var(--color-gold); text-shadow: 2px 3px var(--color-rust); font-weight: bold; }
+.faq-hero-intro { max-width: 30rem; margin: 1.5rem auto 0; }
+.faq-paper-plane { position: absolute; width: clamp(3rem,9vw,8rem); right: 4%; bottom: 2rem; pointer-events: none; }
+.faq-content { max-width: 850px; }
+.faq-content h2 { font-size: clamp(1.8rem,4vw,2.6rem); line-height: 1.15; }
+.faq-list { border-top: 1px solid var(--line); }
+.faq-item { background: #fbf9f2; border: 1px solid var(--line); border-top: 0; }
+.faq-item summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.4rem 1.5rem; cursor: pointer; list-style: none; font: 1.2rem/1.4 var(--font-display); }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover, .faq-item[open] summary { background: var(--color-mist); }
+.faq-toggle { display: grid; place-items: center; flex: 0 0 1.8rem; height: 1.8rem; background: var(--color-gold); color: var(--color-ink); font: 1.3rem/1 Arial,sans-serif; }
+.faq-toggle::before { content: '+'; }
+.faq-item[open] .faq-toggle::before { content: '−'; }
+.faq-answer { padding: 1.25rem 1.5rem 1.5rem; color: #40575e; overflow-wrap: anywhere; }
+.faq-answer p { margin: 0; }
+.faq-contact { background: var(--color-mist); border-top: 4px solid var(--color-gold); }
+@media (max-width: 767.98px) {
+ .faq-hero { padding: 3rem 1rem 5rem; }
+ .faq-paper-plane { bottom: 1rem; width: 4rem; }
+ .faq-item summary { padding: 1.1rem; font-size: 1.1rem; }
+ .faq-answer { padding: 1.1rem; }
+}

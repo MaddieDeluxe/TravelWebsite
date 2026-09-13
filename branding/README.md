@@ -16,3 +16,5 @@ Display type: Georgia, with bold italic display lettering and rust shadows for t
 Style: misty mountain photography, monochrome vintage travel collage, warm paper, fine rectangular borders, yellow stationery accents. Both index.html and links.html share branding/css/colors.css. The earlier palette and logos are no longer referenced by either page.
 
 The supplied assets/mountain background.jpg is the background for both pages. Supplied PNGs in assets/vintage graphics form the responsive hero collage (plane, balloon), destination hand and paper-airplane accents, and Links page clover. Use supplied artwork; do not generate replacement imagery. Existing destination photos, business details, and booking links are retained.
+
+FAQ sourcing: The “Why should I use a travel advisor?” answer follows Fora’s public client guidance at https://www.foratravel.com/why-fora and https://www.foratravel.com/partners (reviewed September 13, 2026), rather than private advisor guidelines. The free-service and partner-payment policy was supplied by Madison. Partner benefits are described as booking-dependent, with no guaranteed upgrades.
