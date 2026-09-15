@@ -65,7 +65,9 @@ a:hover { color: var(--color-rust); }
 .service-description { color: #4f6267; font-size: .95rem; }
 .service-list { margin-top: auto; padding-top: 1rem; border-top: 1px dashed var(--line); }
 .service-list li { margin-top: .5rem; font-size: .8rem; }
-.service-list li::before { content: '↗'; margin-right: .6rem; color: var(--color-rust); }
+.arrow-icon, .service-list li::before { display: inline-block; width: 1em; height: 1em; background-color: currentColor; -webkit-mask: url('../assets/arrow-svg.svg') center / contain no-repeat; mask: url('../assets/arrow-svg.svg') center / contain no-repeat; vertical-align: -.12em; }
+.arrow-icon-right { transform: rotate(45deg); }
+.service-list li::before { content: ''; margin-right: .6rem; color: var(--color-rust); }
 .services-link,.links-home { font-size: .75rem; letter-spacing: .1em; font-weight: 700; text-transform: uppercase; text-decoration-color: var(--color-rust); }
 .destination-showcase { position: relative; isolation: isolate; overflow: hidden; margin-top: 0; background: var(--color-mist); border-block: 1px solid var(--line); }
 .destination-heading { font-size: clamp(2rem,4vw,3.2rem); line-height: 1.1; }
