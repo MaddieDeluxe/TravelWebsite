@@ -2,6 +2,7 @@
 from datetime import date
 from html import escape
 from pathlib import Path
+from urllib.parse import quote
 import re
 import sys
 import json
@@ -20,21 +21,28 @@ def parse_post(text, filename):
         if not line.strip():
             continue
         key, separator, value = line.partition(':')
-        if not separator or key not in ('Title', 'Date', 'Updated', 'Summary', 'Author', 'Status') or key in fields:
+        if not separator or key not in ('Title', 'Order', 'Date', 'Updated', 'Summary', 'Author', 'Status', 'Image', 'Image Alt') or key in fields:
             raise ValueError(f'invalid header: {line}')
         fields[key] = value.strip()
-    for key in ('Title', 'Date', 'Summary'):
+    for key in ('Title', 'Summary'):
         if not fields.get(key):
             raise ValueError(f'add a {key}: line')
-    if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', fields['Date']):
-        raise ValueError('Date must use YYYY-MM-DD')
-    fields['date'] = date.fromisoformat(fields['Date'])
+    fields['order'] = None
+    if fields.get('Order'):
+        if not re.fullmatch(r'[0-9]+', fields['Order']) or int(fields['Order']) < 1:
+            raise ValueError('Order must be a positive whole number (1, 2, 3, ...)')
+        fields['order'] = int(fields['Order'])
+    fields['date'] = None
+    if fields.get('Date'):
+        if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', fields['Date']):
+            raise ValueError('Date must use YYYY-MM-DD')
+        fields['date'] = date.fromisoformat(fields['Date'])
     fields['updated'] = fields['date']
     if fields.get('Updated'):
         if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', fields['Updated']):
             raise ValueError('Updated must use YYYY-MM-DD')
         fields['updated'] = date.fromisoformat(fields['Updated'])
-        if fields['updated'] < fields['date']:
+        if fields['date'] and fields['updated'] < fields['date']:
             raise ValueError('Updated cannot be earlier than Date')
     fields['Status'] = fields.get('Status', 'published').lower()
     if fields['Status'] not in ('published', 'draft'):
@@ -49,30 +57,66 @@ def parse_post(text, filename):
     return fields
 
 
+def prepare_image(post, root):
+    post['image_url'] = None
+    if not post.get('Image'):
+        return
+    path = post['Image'].replace('\\', '/').removeprefix('/')
+    if path.startswith('notes/'):
+        path = path[len('notes/'):]
+    parts = path.split('/')
+    if parts[0] != 'images' or any(part in ('', '.', '..') for part in parts):
+        raise ValueError('Image must be a path inside notes/images, such as notes/images/hotel.jpg')
+    image = root.joinpath(*parts)
+    if not image.resolve().is_relative_to((root / 'images').resolve()):
+        raise ValueError('Image must stay inside notes/images')
+    if image.suffix.lower() not in ('.jpg', '.jpeg', '.png', '.webp', '.gif'):
+        raise ValueError('Image must be a JPG, PNG, WebP, or GIF file')
+    if not image.is_file():
+        raise ValueError(f'Image file does not exist: notes/{path}')
+    post['image_path'] = '/notes/' + quote(path, safe='/')
+    post['image_url'] = 'https://yourluckyday.travel' + post['image_path']
+    post['image_alt'] = post.get('Image Alt') or post['Title']
+
+
+def render_inline(text):
+    output = []
+    end = 0
+    for match in re.finditer(r'\[([^\]\n]+)\]\((https?://[^\s<>]+?)\)', text):
+        output.append(escape(text[end:match.start()]))
+        output.append(f'<a href="{escape(match[2], quote=True)}" target="_blank" rel="noopener noreferrer">{escape(match[1])}</a>')
+        end = match.end()
+    output.append(escape(text[end:]))
+    return ''.join(output)
+
+
 def render_body(text):
     output = []
     for block in re.split(r'\n\s*\n', text):
         lines = block.splitlines()
         if len(lines) == 1 and block.startswith('## '):
-            output.append(f'<h2>{escape(block[3:])}</h2>')
+            output.append(f'<h2>{render_inline(block[3:])}</h2>')
         elif all(line.startswith('- ') for line in lines):
-            output.append('<ul>' + ''.join(f'<li>{escape(line[2:])}</li>' for line in lines) + '</ul>')
+            output.append('<ul>' + ''.join(f'<li>{render_inline(line[2:])}</li>' for line in lines) + '</ul>')
         else:
-            output.append('<p>' + escape(' '.join(lines)) + '</p>')
+            output.append('<p>' + render_inline(' '.join(lines)) + '</p>')
     return '\n'.join(output)
 
 
 def byline(post):
     day = post['date']
-    label = f'{day:%B} {day.day}, {day.year}'
     author = escape(post['Author'])
     if post['Author'] == 'Madison Austin':
         author = f'<a rel="author" href="/#about">{author}</a>'
+    published = ''
+    if day:
+        label = f'{day:%B} {day.day}, {day.year}'
+        published = f' · Published <time datetime="{day.isoformat()}">{label}</time>'
     updated = ''
-    if post['updated'] > day:
+    if post['updated'] and (day is None or post['updated'] > day):
         last = post['updated']
         updated = f' · Updated <time datetime="{last.isoformat()}">{last:%B} {last.day}, {last.year}</time>'
-    return f'<p class="note-meta">{author} · Published <time datetime="{day.isoformat()}">{label}</time>{updated}</p>'
+    return f'<p class="note-meta">{author}{published}{updated}</p>'
 
 
 def article_metadata(post, url):
@@ -82,22 +126,38 @@ def article_metadata(post, url):
     graph = {'@context': 'https://schema.org', '@graph': [
         {'@type': 'Article', '@id': url + '#article', 'mainEntityOfPage': url,
          'headline': post['Title'], 'description': post['Summary'], 'inLanguage': 'en-US',
-         'datePublished': post['Date'], 'dateModified': post['updated'].isoformat(),
          'author': author, 'publisher': {'@type': 'Organization', 'name': 'Your Lucky Day', 'url': 'https://yourluckyday.travel/'}},
         {'@type': 'BreadcrumbList', 'itemListElement': [
             {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://yourluckyday.travel/'},
             {'@type': 'ListItem', 'position': 2, 'name': 'Travel Notes', 'item': 'https://yourluckyday.travel/notes/'},
             {'@type': 'ListItem', 'position': 3, 'name': post['Title'], 'item': url}]}]}
+    metadata = ''
+    if post.get('image_url'):
+        graph['@graph'][0]['image'] = post['image_url']
+    if post['date']:
+        graph['@graph'][0]['datePublished'] = post['date'].isoformat()
+        metadata += f'<meta property="article:published_time" content="{post["date"].isoformat()}">\n'
+    if post['updated']:
+        graph['@graph'][0]['dateModified'] = post['updated'].isoformat()
+        metadata += f'<meta property="article:modified_time" content="{post["updated"].isoformat()}">\n'
     data = json.dumps(graph, ensure_ascii=False).replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
-    return (f'<meta property="article:published_time" content="{post["Date"]}">\n'
-            f'<meta property="article:modified_time" content="{post["updated"].isoformat()}">\n'
-            f'<script type="application/ld+json">{data}</script>\n')
+    return metadata + f'<script type="application/ld+json">{data}</script>\n'
 
 
-def page(template, title, description, url, content, author='Madison Austin', kind='website'):
+def page(template, title, description, url, content, author='Madison Austin', kind='website', post=None):
+    image_url = 'https://yourluckyday.travel/branding/assets/SEO%20Card.png'
+    image_alt = 'Your Lucky Day — Travel Planning & Discovery, with a mountain backdrop'
+    image_details = ('<meta property="og:image:type" content="image/png">\n'
+                     '    <meta property="og:image:width" content="1200">\n'
+                     '    <meta property="og:image:height" content="630">')
+    if post and post.get('image_url'):
+        image_url = post['image_url']
+        image_alt = post['image_alt']
+        image_details = ''
     values = {'TITLE': escape(title), 'DESCRIPTION': escape(description), 'URL': escape(url),
-              'CONTENT': content, 'AUTHOR': escape(author), 'TYPE': kind}
-    return re.sub(r'\{\{(TITLE|DESCRIPTION|URL|CONTENT|AUTHOR|TYPE)\}\}', lambda match: values[match[1]], template)
+              'CONTENT': content, 'AUTHOR': escape(author), 'TYPE': kind,
+              'IMAGE_URL': escape(image_url), 'IMAGE_ALT': escape(image_alt), 'IMAGE_DETAILS': image_details}
+    return re.sub(r'\{\{(TITLE|DESCRIPTION|URL|CONTENT|AUTHOR|TYPE|IMAGE_URL|IMAGE_ALT|IMAGE_DETAILS)\}\}', lambda match: values[match[1]], template)
 
 
 def build(root):
@@ -116,6 +176,7 @@ def build(root):
     for filename in files:
         try:
             post = parse_post((root / 'posts' / filename).read_text(encoding='utf-8-sig'), filename)
+            prepare_image(post, root)
         except (ValueError, OSError) as error:
             raise ValueError(f'{filename}: {error}') from error
         if post['Status'] == 'published':
@@ -123,12 +184,15 @@ def build(root):
                 raise ValueError(f'{filename} and {slugs[post["slug"]]} produce the same URL; rename one file')
             slugs[post['slug']] = filename
             posts.append(post)
-    posts.sort(key=lambda post: (-post['date'].toordinal(), post['slug']))
+    posts.sort(key=lambda post: (post['order'] is None, post['order'] or 0,
+                                 -post['date'].toordinal() if post['date'] else 0, post['slug']))
     template = (root / 'page-template.html').read_text(encoding='utf-8')
     outputs = {}
     cards = []
     for post in posts:
         route = f'/notes/note/{post["slug"]}/'
+        article_image = (f'<img class="note-image" src="{escape(post["image_path"])}" '
+                         f'alt="{escape(post["image_alt"])}" decoding="async">' if post['image_url'] else '')
         content = ('<article class="note-article"><nav class="note-breadcrumbs" aria-label="Breadcrumb">'
                    '<a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/notes/">Travel Notes</a>'
                    f' <span aria-hidden="true">/</span> <span aria-current="page">{escape(post["Title"])}</span></nav>'
@@ -138,6 +202,7 @@ def build(root):
                    '<div class="note-share-fallback" hidden><label for="article-share-url">Copy this article link:</label>'
                    '<input id="article-share-url" type="url" readonly></div></div></div>'
                    f'<p class="note-summary">{escape(post["Summary"])}</p>'
+                   f'{article_image}'
                    f'<div class="note-body">{render_body(post["body"])}</div>'
                    '<aside class="note-inquiry" aria-labelledby="note-inquiry-heading">'
                    '<h2 id="note-inquiry-heading">Have a trip in mind?</h2>'
@@ -145,7 +210,7 @@ def build(root):
                    '<a class="btn btn-brand-primary" href="/inquiry/">Start your travel inquiry '
                    '<span class="arrow-icon" aria-hidden="true"></span></a></aside></article>')
         outputs[root / 'note' / post['slug'] / 'index.html'] = page(template, post['Title'] + ' | Your Lucky Day', post['Summary'],
-                                                        'https://yourluckyday.travel' + route, content, post['Author'], 'article').replace(
+                                                        'https://yourluckyday.travel' + route, content, post['Author'], 'article', post).replace(
                                                             '  </head>', article_metadata(post, 'https://yourluckyday.travel' + route)
                                                             + '<script src="/notes/share.js" defer></script>\n  </head>')
         cards.append(f'<article class="note-card"><h2><a href="{route}">{escape(post["Title"])}</a></h2>'
@@ -179,7 +244,7 @@ def build(root):
     namespace = 'http://www.sitemaps.org/schemas/sitemap/0.9'
     ET.register_namespace('', namespace)
     sitemap = ET.Element(f'{{{namespace}}}urlset')
-    for route, modified in [('/notes/', None), *[(f'/notes/note/{post["slug"]}/', post['updated'].isoformat()) for post in posts]]:
+    for route, modified in [('/notes/', None), *[(f'/notes/note/{post["slug"]}/', post['updated'].isoformat() if post['updated'] else None) for post in posts]]:
         entry = ET.SubElement(sitemap, f'{{{namespace}}}url')
         ET.SubElement(entry, f'{{{namespace}}}loc').text = 'https://yourluckyday.travel' + route
         if modified:

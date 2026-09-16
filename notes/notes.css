@@ -2,15 +2,19 @@
 .notes-intro { max-width: 40rem; margin-bottom: 3rem; }
 .notes-intro h1, .note-title { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; letter-spacing: -.035em; }
 .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 1.5rem; }
-.note-card { border: 1px solid var(--line); border-top: 4px solid var(--color-gold); padding: 1.8rem; background: #fbf9f2; }
+.note-card, .note-article { overflow-wrap: anywhere; background: #fffdf7; border: 1px solid rgba(47,80,89,.12); box-shadow: 0 4px 16px rgba(47,80,89,.06), 0 1px 3px rgba(47,80,89,.03); }
+.note-card { padding: 1.8rem; }
 .note-card h2 { font-size: 1.8rem; line-height: 1.2; overflow-wrap: anywhere; }
 .note-meta { color: #4f6267; font-size: .8rem; margin: 1rem 0; }
-.note-article { width: 100%; overflow-wrap: anywhere; background: #fffdf7; border: 1px solid rgba(47,80,89,.12); box-shadow: 0 4px 16px rgba(47,80,89,.06), 0 1px 3px rgba(47,80,89,.03); padding: clamp(1.25rem, 4vw, 3rem); }
+.note-article { width: 100%; padding: clamp(1.25rem, 4vw, 3rem); }
 .note-back { display: inline-block; margin-bottom: 2rem; font-size: .85rem; }
 .note-summary { font: 1.25rem/1.6 var(--font-display); margin: 1.5rem 0 2rem; }
+.note-image { display: block; width: 100%; height: auto; margin: 0 0 2rem; }
 .note-body { border-top: 1px solid var(--line); padding-top: 1.5rem; }
 .note-body h2 { font-size: 1.8rem; margin: 2rem 0 1rem; }
 .note-body p, .note-body ul { margin-bottom: 1.3rem; line-height: 1.85; }
+.note-body a { color: var(--color-night); font-weight: 700; text-decoration-color: var(--color-mountain); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+.note-body a:hover, .note-body a:focus-visible { color: var(--color-rust); text-decoration-color: currentColor; }
 @media (max-width: 600px) { .notes-main { padding-top: 2.5rem; } }
 
 .note-breadcrumbs { margin-bottom: 2rem; font-size: .8rem; color: #4f6267; }
