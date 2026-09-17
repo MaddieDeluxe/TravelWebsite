@@ -2,7 +2,7 @@
 from datetime import date
 from html import escape
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 import re
 import sys
 import json
@@ -107,12 +107,12 @@ def render_standard_blocks(text):
         elif len(lines) == 1 and (match := re.fullmatch(r'!\[([^\]\n]*)\]\((notes/images/[^\s()]+|https?://[^\s()]+)\)', block)):
             image_path = match[2].replace('\\\\', '/')
             if image_path.startswith('notes/images/'):
-                image_file = Path(__file__).resolve().parent / image_path.removeprefix('notes/')
+                image_file = Path(__file__).resolve().parent / unquote(image_path).removeprefix('notes/')
                 if not image_file.is_file():
                     raise ValueError(f'Image file does not exist: {image_path}')
                 if image_file.suffix.lower() not in ('.jpg', '.jpeg', '.png', '.webp', '.gif'):
                     raise ValueError(f'Image must be a JPG, PNG, WebP, or GIF file: {image_path}')
-                image_path = '/' + image_path
+                image_path = '/' + quote(unquote(image_path), safe='/')
             output.append(f'<img class="note-image note-inline-image" src="{escape(image_path, quote=True)}" alt="{escape(match[1])}" decoding="async">')
         elif all(line.startswith('- ') for line in lines):
             output.append('<ul>' + ''.join(f'<li>{render_inline(line[2:])}</li>' for line in lines) + '</ul>')
