@@ -79,14 +79,20 @@ def prepare_image(post, root):
     post['image_alt'] = post.get('Image Alt') or post['Title']
 
 
+def render_inline_plain(text):
+    """Escape ordinary text and render the small Markdown subset used in notes."""
+    escaped = escape(text)
+    return re.sub(r'\*\*([^*\n]+)\*\*', r'<strong>\1</strong>', escaped)
+
+
 def render_inline(text):
     output = []
     end = 0
     for match in re.finditer(r'\[([^\]\n]+)\]\((https?://[^\s<>]+?)\)', text):
-        output.append(escape(text[end:match.start()]))
-        output.append(f'<a href="{escape(match[2], quote=True)}" target="_blank" rel="noopener noreferrer">{escape(match[1])}</a>')
+        output.append(render_inline_plain(text[end:match.start()]))
+        output.append(f'<a href="{escape(match[2], quote=True)}" target="_blank" rel="noopener noreferrer">{render_inline_plain(match[1])}</a>')
         end = match.end()
-    output.append(escape(text[end:]))
+    output.append(render_inline_plain(text[end:]))
     return ''.join(output)
 
 
@@ -98,6 +104,16 @@ def render_standard_blocks(text):
         lines = block.splitlines()
         if len(lines) == 1 and block.startswith('## '):
             output.append(f'<h2 class="fw-bold">{render_inline(block[3:])}</h2>')
+        elif len(lines) == 1 and (match := re.fullmatch(r'!\[([^\]\n]*)\]\((notes/images/[^\s()]+|https?://[^\s()]+)\)', block)):
+            image_path = match[2].replace('\\\\', '/')
+            if image_path.startswith('notes/images/'):
+                image_file = Path(__file__).resolve().parent / image_path.removeprefix('notes/')
+                if not image_file.is_file():
+                    raise ValueError(f'Image file does not exist: {image_path}')
+                if image_file.suffix.lower() not in ('.jpg', '.jpeg', '.png', '.webp', '.gif'):
+                    raise ValueError(f'Image must be a JPG, PNG, WebP, or GIF file: {image_path}')
+                image_path = '/' + image_path
+            output.append(f'<img class="note-image note-inline-image" src="{escape(image_path, quote=True)}" alt="{escape(match[1])}" decoding="async">')
         elif all(line.startswith('- ') for line in lines):
             output.append('<ul>' + ''.join(f'<li>{render_inline(line[2:])}</li>' for line in lines) + '</ul>')
         else:
