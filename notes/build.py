@@ -90,17 +90,64 @@ def render_inline(text):
     return ''.join(output)
 
 
-def render_body(text):
+def render_standard_blocks(text):
     output = []
     for block in re.split(r'\n\s*\n', text):
+        if not block.strip():
+            continue
         lines = block.splitlines()
         if len(lines) == 1 and block.startswith('## '):
-            output.append(f'<h2>{render_inline(block[3:])}</h2>')
+            output.append(f'<h2 class="fw-bold">{render_inline(block[3:])}</h2>')
         elif all(line.startswith('- ') for line in lines):
             output.append('<ul>' + ''.join(f'<li>{render_inline(line[2:])}</li>' for line in lines) + '</ul>')
         else:
             output.append('<p>' + render_inline(' '.join(lines)) + '</p>')
     return '\n'.join(output)
+
+
+def render_body(text):
+    """Render article text, including optional native disclosure sections.
+
+    A disclosure begins with ``??? Its label`` on a line by itself and ends
+    with a closing ``???``. Its contents use the normal article format.
+    """
+    output = []
+    ordinary = []
+    toggle_label = None
+    toggle_body = []
+
+    def render_ordinary():
+        if ordinary:
+            # A toggle can leave a leading or trailing blank line in the
+            # surrounding text. Trim it so the first following heading still
+            # begins a heading block rather than a paragraph.
+            output.append(render_standard_blocks('\n'.join(ordinary).strip()))
+            ordinary.clear()
+
+    for line in text.splitlines():
+        if toggle_label is None and line.startswith('??? '):
+            render_ordinary()
+            toggle_label = line[4:].strip()
+            if not toggle_label:
+                raise ValueError('add a label after ??? for a toggle section')
+            toggle_body = []
+        elif toggle_label is not None and line.strip() == '???':
+            output.append('<details class="note-toggle"><summary>'
+                          + render_inline(toggle_label)
+                          + '<span class="note-toggle-icon" aria-hidden="true"></span></summary>'
+                          + '<div class="note-toggle-content">'
+                          + render_standard_blocks('\n'.join(toggle_body).strip())
+                          + '</div></details>')
+            toggle_label = None
+            toggle_body = []
+        elif toggle_label is not None:
+            toggle_body.append(line)
+        else:
+            ordinary.append(line)
+    if toggle_label is not None:
+        raise ValueError('close each toggle section with ??? on its own line')
+    render_ordinary()
+    return '\n'.join(part for part in output if part)
 
 
 def byline(post):
@@ -111,12 +158,14 @@ def byline(post):
     published = ''
     if day:
         label = f'{day:%B} {day.day}, {day.year}'
-        published = f' · Published <time datetime="{day.isoformat()}">{label}</time>'
+        published = (f'<span class="note-published">Published '
+                     f'<time datetime="{day.isoformat()}">{label}</time></span>')
     updated = ''
     if post['updated'] and (day is None or post['updated'] > day):
         last = post['updated']
-        updated = f' · Updated <time datetime="{last.isoformat()}">{last:%B} {last.day}, {last.year}</time>'
-    return f'<p class="note-meta">{author}{published}{updated}</p>'
+        updated = (f'<span class="note-updated">Updated '
+                   f'<time datetime="{last.isoformat()}">{last:%B} {last.day}, {last.year}</time></span>')
+    return f'<p class="note-meta"><span class="note-author">{author}</span>{published}{updated}</p>'
 
 
 def article_metadata(post, url):
@@ -197,7 +246,8 @@ def build(root):
                    '<a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/notes/">Travel Notes</a>'
                    f' <span aria-hidden="true">/</span> <span aria-current="page">{escape(post["Title"])}</span></nav>'
                    f'<h1 class="note-title">{escape(post["Title"])}</h1><div class="note-meta-row">{byline(post)}'
-                   '<div class="note-share"><button type="button" class="note-share-button" hidden>Share this article</button>'
+                   '<div class="note-share"><button type="button" class="note-share-button" hidden>'
+                   'Share <i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>'
                    '<span class="note-share-status" role="status"></span>'
                    '<div class="note-share-fallback" hidden><label for="article-share-url">Copy this article link:</label>'
                    '<input id="article-share-url" type="url" readonly></div></div></div>'

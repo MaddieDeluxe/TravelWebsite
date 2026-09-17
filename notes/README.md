@@ -32,6 +32,17 @@ Leave Image blank or remove it to omit the article image and keep the default br
 
 Separate paragraphs with a blank line. Use `## A heading` for section headings and `- Item` for bullets. Add clickable links with `[link text](https://example.com)`. Only HTTP and HTTPS links are supported. Put a blank line before and after headings and lists. Other Markdown and HTML remain plain text.
 
+### Optional toggle sections
+
+Use a toggle to tuck away a checklist, extra detail, or an answer that readers may want to open on demand. Start and end it with `???` on its own line; its contents use the same paragraphs, headings, bullets, and links as the rest of the article:
+
+```text
+??? Questions to ask before booking
+- Is transportation included?
+- What happens if weather changes the plan?
+???
+```
+
 ## Drafts and removal
 
 Keep `Status: draft` to hide a post, or move its source file out of `notes/posts/`. After changing publication status or removing an article source, rebuild and publish the resulting changes, including deleted generated HTML files. The builder removes only obsolete article pages bearing its own generated-file marker; it preserves your text files.
