@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://yourluckyday.travel/sitemap.xml
 Sitemap: https://yourluckyday.travel/notes/sitemap.xml
