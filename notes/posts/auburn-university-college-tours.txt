@@ -1,0 +1,17 @@
+Title: Your article title
+Order: 1
+Date:
+Summary: A short description that helps someone decide whether to read this article.
+Author: Madison Austin
+Image:
+Image Alt:
+Status: draft
+---
+Start your article here. Separate paragraphs with a blank line.
+
+## A section heading
+
+Write the next part of your article here.
+
+- One useful point
+- Another useful point

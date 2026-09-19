@@ -74,3 +74,5 @@ Search engines decide whether and when to index pages. You can submit `https://y
 ## Search and sorting
 
 The generated overview loads List.js 2.3.1 from cdnjs and initializes it with `notes/list.js`. Visitors can search article titles and summaries or sort the cards by publication date. The newest articles appear first by default. The controls remain hidden if JavaScript or the library fails to load, leaving the complete static article list available in its original editorial order.
+
+Searches are reflected in the page URL with a `search` query parameter. For example, `/notes/?search=christmas` opens the overview with that search already applied. While a search is active, a Share button copies the filtered URL. Clearing the field removes the parameter. The older `?post=` article redirects continue to work separately.

@@ -303,8 +303,11 @@ def build(root):
         controls = ('<div class="notes-controls" hidden>'
                     '<div class="notes-search-group"><label for="notes-search">Search travel notes</label>'
                     '<div class="notes-search-row"><input id="notes-search" type="search" '
-                    'placeholder="Search" autocomplete="off">'
-                    '<button class="notes-clear" type="button" hidden>Clear</button></div></div>'
+                    'placeholder="Search" autocomplete="off" maxlength="100">'
+                    '<button class="notes-clear" type="button" hidden>Clear</button>'
+                    '<button class="notes-search-share" type="button" hidden>Share</button>'
+                    '<span class="visually-hidden notes-search-share-status" role="status" aria-live="polite"></span>'
+                    '</div></div>'
                     '<div class="notes-sort-group" aria-label="Sort travel notes"><span>Sort by</span>'
                     '<button class="sort" type="button" data-sort="published" data-default-order="desc">Date</button>'
                     '</div></div>')
