@@ -1,9 +1,14 @@
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4T07M1ET6K"></script>
+<!-- Google tag (gtag.js) — production only -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  if (['yourluckyday.travel', 'www.yourluckyday.travel'].includes(window.location.hostname)) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4T07M1ET6K');
 
-  gtag('config', 'G-4T07M1ET6K');
+    const googleTag = document.createElement('script');
+    googleTag.async = true;
+    googleTag.src = 'https://www.googletagmanager.com/gtag/js?id=G-4T07M1ET6K';
+    document.head.appendChild(googleTag);
+  }
 </script>
