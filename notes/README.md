@@ -55,6 +55,7 @@ Draft .txt files deployed to a public site remain accessible directly. Keep priv
 - `build.cmd` / `build.py`: generate the website pages locally; no extra packages required.
 - `page-template.html`: shared page structure, branding, and preview image.
 - `notes.css`: styles for this section.
+- `list.js`: initializes List.js search and sorting on the generated overview.
 - `index.html`: the generated overview.
 - `note/`: generated article folders, each containing its own `index.html`; edit the source text instead.
 
@@ -69,3 +70,7 @@ For a substantial revision, optionally add `Updated: YYYY-MM-DD` to the article 
 Write a specific Title that describes the question your article answers, and an accurate Summary rather than a string of keywords. Use descriptive `##` headings and give concrete advice from your own experience. Replace test and placeholder articles before publishing; mark them `Status: draft` to exclude them. Only a supplied article image is included as the article image in structured data.
 
 Search engines decide whether and when to index pages. You can submit `https://yourluckyday.travel/notes/sitemap.xml` in Google Search Console after publishing.
+
+## Search and sorting
+
+The generated overview loads List.js 2.3.1 from cdnjs and initializes it with `notes/list.js`. Visitors can search article titles and summaries or sort the cards by publication date. The newest articles appear first by default. The controls remain hidden if JavaScript or the library fails to load, leaving the complete static article list available in its original editorial order.

@@ -279,18 +279,55 @@ def build(root):
                                                         'https://yourluckyday.travel' + route, content, post['Author'], 'article', post).replace(
                                                             '  </head>', article_metadata(post, 'https://yourluckyday.travel' + route)
                                                             + '<script src="/notes/share.js" defer></script>\n  </head>')
-        cards.append(f'<article class="note-card"><h2><a href="{route}">{escape(post["Title"])}</a></h2>'
-                     f'{byline(post)}<p>{escape(post["Summary"])}</p></article>')
-    intro = ('<div class="notes-intro"><p class="section-eyebrow">From Madison Austin</p><h1>Travel notes.</h1>'
+        published = post['date'].isoformat() if post['date'] else ''
+        card_author = escape(post['Author'])
+        if post['Author'] == 'Madison Austin':
+            card_author = f'<a rel="author" href="/#about">{card_author}</a>'
+        card_date = ''
+        if post['date']:
+            day = post['date']
+            card_date = (f'<span class="note-published">Published '
+                         f'<time datetime="{day.isoformat()}">{day:%B} {day.day}, {day.year}</time></span>')
+        share_label = escape(f'Copy link to {post["Title"]}', quote=True)
+        cards.append(f'<article class="note-card" data-published="{published}">'
+                     f'<h2><a class="note-card-title" href="{route}">{escape(post["Title"])}</a></h2>'
+                     '<div class="note-card-meta-row">'
+                     f'<p class="note-meta"><span class="note-author">{card_author}</span>{card_date}</p>'
+                     f'<button class="note-card-share-button" type="button" data-share-url="{route}" '
+                     f'aria-label="{share_label}" title="Copy link"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>'
+                     '<span class="visually-hidden note-card-share-status" role="status" aria-live="polite"></span></div>'
+                     f'<p class="note-card-summary">{escape(post["Summary"])}</p></article>')
+    intro = ('<div class="notes-intro"><h1>Travel notes.</h1>'
              '<p>Hotels, places, and the choices that shape a trip. Here’s how I think about them.</p></div>')
-    listing = '<div class="notes-grid">' + '\n'.join(cards) + '</div>' if cards else '<p>My first travel notes are on the way. Check back soon.</p>'
+    if cards:
+        controls = ('<div class="notes-controls" hidden>'
+                    '<div class="notes-search-group"><label for="notes-search">Search travel notes</label>'
+                    '<div class="notes-search-row"><input id="notes-search" type="search" '
+                    'placeholder="Search" autocomplete="off">'
+                    '<button class="notes-clear" type="button" hidden>Clear</button></div></div>'
+                    '<div class="notes-sort-group" aria-label="Sort travel notes"><span>Sort by</span>'
+                    '<button class="sort" type="button" data-sort="published" data-default-order="desc">Date</button>'
+                    '</div></div>')
+        listing = ('<div id="travel-notes-list" class="notes-list">' + controls
+                   + '<p class="notes-results" role="status" aria-live="polite"></p>'
+                   + '<div class="notes-grid list">' + '\n'.join(cards) + '</div>'
+                   + '<p class="notes-empty" hidden>No travel notes match your search.</p></div>')
+    else:
+        listing = '<p>My first travel notes are on the way. Check back soon.</p>'
     # Keep previously shared query-string links working; reading articles needs no JS.
     redirect = ('<script>const p = new URLSearchParams(location.search).get("post");'
                 'if (p && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p)) '
                 'location.replace("/notes/note/" + p + "/" + location.hash);</script>')
-    outputs[root / 'index.html'] = page(template, 'Travel Notes | Your Lucky Day',
-                                      'Travel planning notes from Madison Austin: hotels, destinations, and the decisions that shape a trip.',
-                                      'https://yourluckyday.travel/notes/', intro + listing + redirect)
+    overview = page(template, 'Travel Notes | Your Lucky Day',
+                    'Travel planning notes from Madison Austin: hotels, destinations, and the decisions that shape a trip.',
+                    'https://yourluckyday.travel/notes/', intro + listing + redirect)
+    if cards:
+        overview = overview.replace(
+            '  </head>',
+            '    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js" defer></script>\n'
+            '    <script src="/notes/list.js" defer></script>\n'
+            '    <script src="/notes/share.js" defer></script>\n  </head>')
+    outputs[root / 'index.html'] = overview
     stale = []
     for path in [*root.glob('*/index.html'), *root.glob('note/*/index.html')]:
         if path not in outputs and MARKER in path.read_text(encoding='utf-8'):
