@@ -1,0 +1,4 @@
+REBUILD NOTES COMMAND
+cd "/Users/neo/Documents/TravelWebsite"
+python3 notes/build.py
+

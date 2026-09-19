@@ -5,7 +5,7 @@ Write posts as plain text. Each published post becomes a complete page with its 
 ## Add or edit a post
 
 1. Copy `posts/template.txt` to a descriptive filename such as `posts/choosing-a-hotel.txt`. Keep all article text files in `notes/posts/`.
-2. Fill in Title, Order, Summary, Author, and your article below the `---` line. Order controls the display order: 1 first, then 2, then 3. Date is optional: leave it blank, remove the line, or enter YYYY-MM-DD. Remove `Status: draft` or change it to `Status: published` when ready. Status is optional and defaults to published.
+2. Fill in Title, Order, Summary, Author, and your article below the `---` line. Order controls the display order: 1 first, then 2, then 3. Date is optional: leave it blank, remove the line, or enter YYYY-MM-DD. Set `Show Table of Contents: true` to add links that scroll readers to each `##` heading; leave it `false` to hide them. Remove `Status: draft` or change it to `Status: published` when ready. Status is optional and defaults to published.
 3. Double-click `build.cmd` to generate the pages. It uses Python, which is installed on this computer. Read the result in the window; errors identify the file that needs fixing. Alternatively run `python notes/build.py` from the website folder.
 4. Publish the updated website, including the generated HTML folders. Run the build again after every text edit, then publish.
 
@@ -30,7 +30,21 @@ Windows paths such as `notes\images\hotel.jpg` also work. Use JPG, PNG, WebP, or
 
 Leave Image blank or remove it to omit the article image and keep the default branded sharing preview. Rebuild after editing and publish the image files along with the generated pages. The builder reports missing image files before changing pages. Sharing services may cache previews, so an existing shared link can take time to show a changed image.
 
-Separate paragraphs with a blank line. Use `## A heading` for section headings and `- Item` for bullets. Add clickable links with `[link text](https://example.com)`. Only HTTP and HTTPS links are supported. Put a blank line before and after headings and lists. Other Markdown and HTML remain plain text.
+Separate paragraphs with a blank line. Use Markdown headings from `# Heading` through `###### Heading`; `##` headings are used for table-of-contents entries. Use `- Item` for bullets, `*italic*` or `_italic_` for emphasis, and `**bold**` or `__bold__` for strong emphasis. Add clickable links with `[link text](https://example.com)`. Only HTTP and HTTPS links are supported. Put a blank line before and after headings and lists. Other Markdown and HTML remain plain text.
+
+Set `Show Table of Contents: true` in an article header to show an “On this page” list above the article body. Each link smoothly scrolls to its matching `##` heading. The setting accepts only `true` or `false` and defaults to `false` when omitted.
+
+### Optional article call to action
+
+Every article ends with the default inquiry call to action. Add any of these fields to an article header to replace the corresponding default text for that article:
+
+```text
+CTA Title: Ready to plan your Auburn visit?
+CTA Description: I can help you choose a convenient hotel and work out the travel details.
+CTA Button: Plan your Auburn trip
+```
+
+Each field is optional. A blank or omitted field uses the shared default. The button continues to link to `/inquiry/`.
 
 ### Optional toggle sections
 
@@ -42,6 +56,20 @@ Use a toggle to tuck away a checklist, extra detail, or an answer that readers m
 - What happens if weather changes the plan?
 ???
 ```
+
+### Optional panel sections
+
+Use a panel for content that should remain visible but needs stronger separation from the surrounding article. Start and end an unlabeled panel with `!!!` on its own line:
+
+```text
+!!!
+#### Late morning
+
+If possible, schedule a visit with your student’s prospective college or academic department.
+!!!
+```
+
+Add text after the opening marker, such as `!!! Travel tip`, when the panel itself needs a title. Panels render as elevated, non-collapsible boxes. Their contents support the same paragraphs, headings, lists, links, and emphasis as the rest of the article.
 
 ## Drafts and removal
 

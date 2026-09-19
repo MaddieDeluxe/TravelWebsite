@@ -38,7 +38,7 @@ a:hover { color: var(--color-rust); }
 .hero-subheading { display: block; margin-top: 1.65rem; color: var(--color-ink); font-size: clamp(1.7rem,3vw,2.7rem); font-weight: 400; line-height: 1.08; letter-spacing: -.025em; text-shadow: none; }
 .hero-intro { margin-inline: auto; max-width: 27rem; color: var(--color-ink); font-size: .95rem; line-height: 1.8; }
 .btn-brand-primary,.btn-contact { padding: .95rem 1.3rem; background: var(--color-gold); color: var(--color-ink); border: 1px solid var(--color-ink); border-radius: 0; box-shadow: 4px 4px 0 var(--color-ink); font-size: .71rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.btn-brand-primary:hover,.btn-contact:hover { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-ink); transform: translateY(-2px); }
+.btn-brand-primary:hover,.btn-contact:hover,.custom-navbar .header-contact-link:hover { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-ink); transform: translateY(-2px); }
 .travel-note { display: flex; align-items: center; justify-content: center; gap: 2rem; padding: 1.4rem 2rem; background: var(--color-gold); border: 0; }
 .travel-note p { margin: 0; font: italic 1.2rem/1.5 var(--font-display); text-align: center; }
 .travel-note cite { white-space: nowrap; font-size: .95rem; }
@@ -102,6 +102,7 @@ a:hover { color: var(--color-rust); }
 .link-tree-item { display: flex; align-items: center; padding: .9rem 1rem; min-height: 4.2rem; color: var(--color-ink); background: #fbf9f2; border: 1px solid var(--line); font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; }
 .link-tree-item:first-child { background: var(--color-gold); border-color: var(--color-ink); box-shadow: 3px 3px 0 var(--color-ink); }
 .link-tree-item:hover { background: var(--color-mist); color: var(--color-ink); }
+.link-tree-item:first-child:hover { background: var(--color-paper); color: var(--color-ink); border-color: var(--color-ink); transform: translateY(-2px); }
 .link-tree-icon { display: grid; place-items: center; flex: 0 0 2rem; height: 2rem; margin-right: .6rem; font: 1.3rem var(--font-display); }
 .link-tree-label { flex: 1; }
 .link-tree-arrow { margin-left: .6rem; font-size: 1.2rem; }

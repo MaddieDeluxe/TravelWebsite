@@ -68,4 +68,23 @@
       cardButton.disabled = false;
     });
   });
+
+  const backToTop = document.querySelector('.note-back-to-top');
+  if (backToTop) {
+    let updatePending = false;
+    const updateBackToTop = () => {
+      const scrollableLength = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      backToTop.classList.toggle('is-visible', window.scrollY > scrollableLength * 0.3);
+      updatePending = false;
+    };
+    backToTop.hidden = false;
+    updateBackToTop();
+    window.addEventListener('scroll', () => {
+      if (!updatePending) {
+        updatePending = true;
+        window.requestAnimationFrame(updateBackToTop);
+      }
+    }, { passive: true });
+    window.addEventListener('resize', updateBackToTop);
+  }
 })();

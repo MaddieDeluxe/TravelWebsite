@@ -21,7 +21,7 @@ def parse_post(text, filename):
         if not line.strip():
             continue
         key, separator, value = line.partition(':')
-        if not separator or key not in ('Title', 'Order', 'Date', 'Updated', 'Summary', 'Author', 'Status', 'Image', 'Image Alt') or key in fields:
+        if not separator or key not in ('Title', 'Order', 'Date', 'Updated', 'Summary', 'Author', 'Status', 'Image', 'Image Alt', 'Show Table of Contents', 'CTA Title', 'CTA Description', 'CTA Button') or key in fields:
             raise ValueError(f'invalid header: {line}')
         fields[key] = value.strip()
     for key in ('Title', 'Summary'):
@@ -48,6 +48,10 @@ def parse_post(text, filename):
     if fields['Status'] not in ('published', 'draft'):
         raise ValueError('Status must be published or draft')
     fields['Author'] = fields.get('Author') or 'Madison Austin'
+    show_toc = fields.get('Show Table of Contents', 'false').lower()
+    if show_toc not in ('true', 'false'):
+        raise ValueError('Show Table of Contents must be true or false')
+    fields['show_toc'] = show_toc == 'true'
     fields['body'] = '\n'.join(lines[divider + 1:]).strip()
     if not fields['body']:
         raise ValueError('add some article text below ---')
@@ -81,8 +85,22 @@ def prepare_image(post, root):
 
 def render_inline_plain(text):
     """Escape ordinary text and render the small Markdown subset used in notes."""
-    escaped = escape(text)
-    return re.sub(r'\*\*([^*\n]+)\*\*', r'<strong>\1</strong>', escaped)
+    output = []
+    end = 0
+    pattern = re.compile(
+        r'\*\*(?=\S)(.+?)(?<=\S)\*\*'
+        r'|__(?=\S)(.+?)(?<=\S)__'
+        r'|(?<!\*)\*(?=\S)([^*\n]+?)(?<=\S)\*(?!\*)'
+        r'|(?<![\w_])_(?=\S)([^_\n]+?)(?<=\S)_(?![\w_])'
+    )
+    for match in pattern.finditer(text):
+        output.append(escape(text[end:match.start()]))
+        content = next(group for group in match.groups() if group is not None)
+        tag = 'strong' if match.group(1) is not None or match.group(2) is not None else 'em'
+        output.append(f'<{tag}>{escape(content)}</{tag}>')
+        end = match.end()
+    output.append(escape(text[end:]))
+    return ''.join(output)
 
 
 def render_inline(text):
@@ -96,14 +114,40 @@ def render_inline(text):
     return ''.join(output)
 
 
-def render_standard_blocks(text):
+def heading_id(text, used_ids):
+    """Return a readable, unique fragment ID for a Markdown heading."""
+    plain_text = re.sub(r'\[([^\]\n]+)\]\(https?://[^\s<>]+?\)', r'\1', text)
+    label_slug = re.sub(r'[^a-z0-9]+', '-', plain_text.lower()).strip('-') or 'section'
+    base = f'section-{label_slug}'
+    heading_id = base
+    suffix = 2
+    while heading_id in used_ids:
+        heading_id = f'{base}-{suffix}'
+        suffix += 1
+    used_ids.add(heading_id)
+    return heading_id
+
+
+def render_standard_blocks(text, headings=None, used_ids=None):
     output = []
     for block in re.split(r'\n\s*\n', text):
         if not block.strip():
             continue
         lines = block.splitlines()
-        if len(lines) == 1 and block.startswith('## '):
-            output.append(f'<h2 class="fw-bold">{render_inline(block[3:])}</h2>')
+        heading_match = re.fullmatch(r'(#{1,6})[ \t]+(.+)', block) if len(lines) == 1 else None
+        if heading_match:
+            level = len(heading_match[1])
+            label = heading_match[2].strip()
+            anchor_attribute = ''
+            if headings is not None:
+                anchor = heading_id(label, used_ids)
+                anchor_attribute = f' id="{anchor}"'
+                if level == 2:
+                    headings.append((anchor, label))
+            output.append(
+                f'<h{level} class="fw-bold"{anchor_attribute}>'
+                f'{render_inline(label)}</h{level}>'
+            )
         elif len(lines) == 1 and (match := re.fullmatch(r'!\[([^\]\n]*)\]\((notes/images/[^\s()]+|https?://[^\s()]+)\)', block)):
             image_path = match[2].replace('\\\\', '/')
             if image_path.startswith('notes/images/'):
@@ -122,26 +166,31 @@ def render_standard_blocks(text):
 
 
 def render_body(text):
-    """Render article text, including optional native disclosure sections.
+    """Render article text, including optional disclosure and panel sections.
 
     A disclosure begins with ``??? Its label`` on a line by itself and ends
     with a closing ``???``. Its contents use the normal article format.
+    A non-collapsible panel uses the same structure with ``!!!`` markers.
     """
     output = []
     ordinary = []
     toggle_label = None
     toggle_body = []
+    panel_label = None
+    panel_body = []
+    headings = []
+    used_ids = set()
 
     def render_ordinary():
         if ordinary:
             # A toggle can leave a leading or trailing blank line in the
             # surrounding text. Trim it so the first following heading still
             # begins a heading block rather than a paragraph.
-            output.append(render_standard_blocks('\n'.join(ordinary).strip()))
+            output.append(render_standard_blocks('\n'.join(ordinary).strip(), headings, used_ids))
             ordinary.clear()
 
     for line in text.splitlines():
-        if toggle_label is None and line.startswith('??? '):
+        if toggle_label is None and panel_label is None and line.startswith('??? '):
             render_ordinary()
             toggle_label = line[4:].strip()
             if not toggle_label:
@@ -152,29 +201,63 @@ def render_body(text):
                           + render_inline(toggle_label)
                           + '<span class="note-toggle-icon" aria-hidden="true"></span></summary>'
                           + '<div class="note-toggle-content">'
-                          + render_standard_blocks('\n'.join(toggle_body).strip())
+                          + render_standard_blocks('\n'.join(toggle_body).strip(), headings, used_ids)
                           + '</div></details>')
             toggle_label = None
             toggle_body = []
         elif toggle_label is not None:
             toggle_body.append(line)
+        elif panel_label is None and line.strip() == '!!!':
+            render_ordinary()
+            panel_label = ''
+            panel_body = []
+        elif panel_label is None and line.startswith('!!! '):
+            render_ordinary()
+            panel_label = line[4:].strip()
+            if not panel_label:
+                raise ValueError('add a label after !!! for a panel section')
+            panel_body = []
+        elif panel_label is not None and line.strip() == '!!!':
+            panel_title = ('<h4 class="note-panel-title">' + render_inline(panel_label) + '</h4>'
+                           if panel_label else '')
+            output.append('<section class="note-panel">'
+                          + panel_title
+                          + '<div class="note-panel-content">'
+                          + render_standard_blocks('\n'.join(panel_body).strip(), headings, used_ids)
+                          + '</div></section>')
+            panel_label = None
+            panel_body = []
+        elif panel_label is not None:
+            panel_body.append(line)
         else:
             ordinary.append(line)
     if toggle_label is not None:
         raise ValueError('close each toggle section with ??? on its own line')
+    if panel_label is not None:
+        raise ValueError('close each panel section with !!! on its own line')
     render_ordinary()
-    return '\n'.join(part for part in output if part)
+    return '\n'.join(part for part in output if part), headings
+
+
+def table_of_contents(headings):
+    if not headings:
+        return ''
+    links = ''.join(
+        f'<li><a href="#{escape(anchor, quote=True)}">{render_inline(label)}</a></li>'
+        for anchor, label in headings
+    )
+    return ('<nav class="note-toc" aria-labelledby="note-toc-heading">'
+            '<h2 id="note-toc-heading">On this page</h2>'
+            f'<ol>{links}</ol></nav>')
 
 
 def byline(post):
     day = post['date']
     author = escape(post['Author'])
-    if post['Author'] == 'Madison Austin':
-        author = f'<a rel="author" href="/#about">{author}</a>'
     published = ''
     if day:
         label = f'{day:%B} {day.day}, {day.year}'
-        published = (f'<span class="note-published">Published '
+        published = (f'<span class="note-published">'
                      f'<time datetime="{day.isoformat()}">{label}</time></span>')
     updated = ''
     if post['updated'] and (day is None or post['updated'] > day):
@@ -256,9 +339,14 @@ def build(root):
     cards = []
     for post in posts:
         route = f'/notes/note/{post["slug"]}/'
+        cta_title = escape(post.get('CTA Title') or 'Have a trip in mind?')
+        cta_description = escape(post.get('CTA Description') or 'Tell me what you’re thinking. I’ll get back to you within 24 hours of receiving your inquiry.')
+        cta_button = escape(post.get('CTA Button') or 'Start your travel inquiry')
         article_image = (f'<img class="note-image" src="{escape(post["image_path"])}" '
                          f'alt="{escape(post["image_alt"])}" decoding="async">' if post['image_url'] else '')
-        content = ('<article class="note-article"><nav class="note-breadcrumbs" aria-label="Breadcrumb">'
+        body, headings = render_body(post['body'])
+        toc = table_of_contents(headings) if post['show_toc'] else ''
+        content = ('<article class="note-article" id="article-top"><nav class="note-breadcrumbs" aria-label="Breadcrumb">'
                    '<a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/notes/">Travel Notes</a>'
                    f' <span aria-hidden="true">/</span> <span aria-current="page">{escape(post["Title"])}</span></nav>'
                    f'<h1 class="note-title">{escape(post["Title"])}</h1><div class="note-meta-row">{byline(post)}'
@@ -269,24 +357,24 @@ def build(root):
                    '<input id="article-share-url" type="url" readonly></div></div></div>'
                    f'<p class="note-summary">{escape(post["Summary"])}</p>'
                    f'{article_image}'
-                   f'<div class="note-body">{render_body(post["body"])}</div>'
+                   f'{toc}<div class="note-body">{body}</div>'
                    '<aside class="note-inquiry" aria-labelledby="note-inquiry-heading">'
-                   '<h2 id="note-inquiry-heading">Have a trip in mind?</h2>'
-                   '<p>Tell me what you’re thinking. I’ll get back to you within 24 hours of receiving your inquiry.</p>'
-                   '<a class="btn btn-brand-primary" href="/inquiry/">Start your travel inquiry '
-                   '<span class="arrow-icon" aria-hidden="true"></span></a></aside></article>')
+                   f'<h2 id="note-inquiry-heading">{cta_title}</h2>'
+                   f'<p>{cta_description}</p>'
+                   f'<a class="btn btn-brand-primary" href="/inquiry/">{cta_button} '
+                   '<span class="arrow-icon" aria-hidden="true"></span></a></aside></article>'
+                   '<a class="note-back-to-top" href="#article-top" hidden>'
+                   'Return to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>')
         outputs[root / 'note' / post['slug'] / 'index.html'] = page(template, post['Title'] + ' | Your Lucky Day', post['Summary'],
                                                         'https://yourluckyday.travel' + route, content, post['Author'], 'article', post).replace(
                                                             '  </head>', article_metadata(post, 'https://yourluckyday.travel' + route)
                                                             + '<script src="/notes/share.js" defer></script>\n  </head>')
         published = post['date'].isoformat() if post['date'] else ''
         card_author = escape(post['Author'])
-        if post['Author'] == 'Madison Austin':
-            card_author = f'<a rel="author" href="/#about">{card_author}</a>'
         card_date = ''
         if post['date']:
             day = post['date']
-            card_date = (f'<span class="note-published">Published '
+            card_date = (f'<span class="note-published">'
                          f'<time datetime="{day.isoformat()}">{day:%B} {day.day}, {day.year}</time></span>')
         share_label = escape(f'Copy link to {post["Title"]}', quote=True)
         cards.append(f'<article class="note-card" data-published="{published}">'

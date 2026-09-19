@@ -1,17 +1,224 @@
-Title: Your article title
-Order: 1
-Date:
-Summary: A short description that helps someone decide whether to read this article.
+Title: Auburn University College Tours: A Guide for Out-of-State Families
+Order: 3
+Date: 2026-09-18
+Summary: Practical advice for planning an Auburn University college tour, including where to stay, where to eat, how long to visit, and what to do while you’re here.
 Author: Madison Austin
-Image:
-Image Alt:
-Status: draft
+Image: notes/images/auburn-university.png
+Image Alt: Auburn University campus in Auburn, Alabama.
+Show Table of Contents: true
+CTA Title: Ready to Plan Your College Visit?
+CTA Description: I can help you choose a convenient hotel, compare travel options, and plan an Auburn visit that doesn’t feel rushed.
+CTA Button: Plan Your Auburn Visit
+Status: published
 ---
-Start your article here. Separate paragraphs with a blank line.
+If you’re planning an Auburn University college tour from out of state, the campus visit itself is only part of the trip. You still have to decide where to stay, where to eat, how much time to spend in Auburn, and what’s actually worth doing while you’re here.
 
-## A section heading
+I’ve lived in or around Auburn my entire life. I graduated summa cum laude from Auburn University’s Samuel Ginn College of Engineering in 2021, and I’ll return in fall 2026 to begin my master’s degree.
 
-Write the next part of your article here.
+For this guide, I combined that local experience with first-hand accounts from parents and students who traveled to Auburn for college visits. The same questions and habits came up repeatedly, so this guide focuses on the practical parts of planning an Auburn college tour: where families stay, how they structure the visit, where they eat, and what seems to matter most once they’re actually here.
 
-- One useful point
-- Another useful point
+## How Long to Stay
+
+For most families traveling from out of state, I’d highly recommend spending at least one night in Auburn. Arriving the afternoon or evening before your campus tour gives you time to check in, have dinner, walk around downtown, and start getting a feel for the area without worrying about time.
+
+Then, after your tour the next morning, leave a few hours open. Visit your student’s academic department, grab lunch, walk through downtown, or spend some time on campus without a tour guide. That unstructured time matters because you’re not just deciding whether Auburn looks good on a campus tour. Your student is trying to picture what it would actually feel like to live here.
+
+If you’re flying in, visiting multiple academic departments, or simply don’t want the trip to feel rushed, two nights can make more sense. But for most college-tour visits, arriving the day before and leaving later the following day gives you enough time to see Auburn without turning the trip into something bigger.
+
+## Where to Stay Near Campus
+
+For a college visit, I’d prioritize **location over getting the absolute cheapest hotel rate**. Parking around Auburn isn’t always the easiest, and depending on the time of year, traffic, campus events, move-in, or football weekends can make something as simple as moving your car considerably more annoying than it needs to be.
+
+That’s why staying within walking distance of campus and downtown can be worth paying a little more. You can park once, walk to your campus tour, grab lunch downtown, explore afterward, and avoid spending part of your visit figuring out where you’re allowed to leave the car.
+
+A few options stand out depending on the kind of trip you want:
+
+- [**The Hotel at Auburn University**](https://www.auhcc.com/) is the most straightforward choice for convenience. It sits directly across from campus and puts you within easy walking distance of both the university and downtown.
+- [**Graduate by Hilton Auburn**](https://www.hilton.com/en/hotels/aubgagu-graduate-auburn-al/) is another walkable option with much more Auburn personality built into the hotel itself. If you want the school spirit to start before you ever step onto campus, this is a good fit.
+- [**The Collegiate Hotel**](https://staycoho.com/) is small, distinctive, and close to downtown. It feels much more connected to Auburn than a standard chain hotel.
+- [**The Laurel Hotel & Spa**](https://www.laurelhotelandspa.com/) is the splurge option. If you’re turning the college visit into a nicer parent-and-teen trip, it offers a more upscale stay while keeping you right in the middle of Auburn.
+
+There are plenty of less expensive hotels farther from campus, and they can make perfect sense if budget matters more than walkability. The tradeoff is that you’ll probably be driving back and forth.
+
+For a short college-tour trip, my preference would be simple: **stay close enough that the car can remain parked for most of the visit.** Auburn is much easier to get a feel for on foot anyway.
+
+## Book an Academic Department Visit
+
+The general Auburn University campus tour is the obvious place to start, but I wouldn’t stop there.
+
+If your student already has an idea of what they want to study, check whether that college or department offers its own visit. Auburn Engineering, for example, has separate in-person visits and specifically encourages prospective students to pair an engineering visit with the university-wide campus tour.
+
+These smaller academic visits can give you information the general tour simply doesn’t have time to cover. Your student may get to see labs, classrooms, and facilities they would actually use, while also getting a better sense of the department itself.
+
+I would also use this time to ask questions that are specific to your student. What are internships like? How common are co-ops? Where do students in this major spend most of their time? What classes tend to be difficult? What do students wish they had known before starting?
+
+In the first-hand accounts I reviewed, department-specific visits came up repeatedly as some of the most useful parts of the trip. For a student trying to decide between several universities, seeing their actual academic environment can be much more meaningful than seeing another residence hall.
+
+## Explore Campus and Downtown
+
+Try not to schedule every minute.
+
+After the official tour, I’d leave at least a couple of hours open to walk around campus and downtown at your own pace. Auburn University itself encourages prospective students to spend time getting to know the community surrounding campus, and some admissions events specifically recommend walking between nearby hotels, campus and downtown.
+
+This is when you can start paying attention to the things that are difficult to capture in an admissions presentation.
+
+Walk through the student center. Sit somewhere for a while. See how busy campus feels. Walk through the area surrounding your student’s prospective major. Look at where students are eating and studying.
+
+Then walk downtown.
+
+Downtown Auburn sits directly against campus, so I don’t really consider it a separate sightseeing stop. If your student attends Auburn, this will be part of their day-to-day environment. Toomer’s Corner sits at the intersection of campus and downtown, with shops and restaurants continuing from there.
+
+Stop for lemonade at [Toomer’s](https://toomers.com/) while you’re downtown.
+
+## Where to Eat
+
+I’d plan for two different kinds of meals while you’re here: **one good sit-down meal together and one meal that feels a little more like everyday Auburn.**
+
+For dinner, [**Acre**](https://www.acreauburn.com/) is one of my favorite choices if you want the trip to feel a little special. It’s only a few blocks from Toomer’s Corner and focuses on modern Southern food. Reservations are available, which I would recommend if you’re visiting during a busy weekend.
+
+[**Hamilton’s on Magnolia**](https://www.magnolia.hamiltonsgroup.com/) is another longtime downtown option, just one block from Toomer’s Corner. It’s casual enough that you don’t need to turn your college tour into an occasion, but still works well for a nice dinner together. Hamilton’s does not take reservations, so keep that in mind if Auburn is especially busy.
+
+For a more casual meal, I’d use the opportunity to eat somewhere students actually recognize as part of Auburn life. [**Momma Goldberg’s**](https://mommagoldbergs.com/gpb_portfolio/auburn-magnolia/) is probably the most obvious example. [Taco Mama](https://tacomamaonline.com/) and [Moe’s Original BBQ](https://www.moesoriginalbbq.com/lo/auburn) are also easy casual options around downtown.
+
+A short visit does not require a definitive ranking of Auburn restaurants. Have one nice meal, eat somewhere casual, and spend the rest of your time seeing the place your student may actually live.
+
+## Traveling from Out of State
+
+If you’re driving, Auburn is relatively straightforward to reach from much of the Southeast. Interstate 85 runs just south of town, with direct access from the Atlanta and Montgomery directions.
+
+Flying takes a little more planning.
+
+Auburn University lists several airports that families can consider:
+
+- **Hartsfield-Jackson Atlanta International Airport (ATL):** about 100 miles away
+- **Montgomery Regional Airport (MGM):** about 60 miles away
+- **Columbus Airport (CSG):** about 40 miles away
+- **Birmingham-Shuttlesworth International Airport (BHM):** about 115 miles away
+
+For many out-of-state travelers, Atlanta will have the greatest number of flight options. That doesn’t automatically make it the best choice. Compare airfare, rental-car pricing and arrival times across the airports that make sense for your route.
+
+There is also one detail that catches people occasionally: **Atlanta is in Eastern Time. Auburn is in Central Time.**
+If you’re driving from Atlanta to an Auburn tour, your phone will change by an hour somewhere along the way. That generally works in your favor coming to Auburn, but it is still worth remembering when you’re planning flights and tour times. Auburn’s own travel guidance notes the time change on the Atlanta route.
+
+When flying home through Atlanta, remember that the time change takes an hour away on the return trip.
+
+## College Visit Logistics
+
+### Plan Ahead for Parking
+
+Don’t arrive five minutes before your tour assuming you’ll find a space next to the building.
+
+Auburn has designated visitor parking, including spaces in several campus parking decks and lots. Some visitor spaces use [ParkMobile](https://www.parkmobile.io/), and campus-tour parking instructions can vary depending on the visit you booked. Check the information Auburn sends you before leaving home rather than improvising once you arrive.
+
+During busier parts of the year, moving the car around campus and downtown can become annoying very quickly. Football weekends are the obvious example, but move-in, graduation and major university events can also change the normal rhythm of town.
+
+This is another reason I like staying within walking distance when the budget allows it.
+
+### Allow Extra Time for Breakfast
+
+This came directly from one of the out-of-state family accounts I reviewed. They stayed near campus before an early tour, attempted a sit-down breakfast and eventually had to abandon it because service was taking too long.
+
+For an early campus tour, I would either eat earlier than seems necessary or choose something quick. There is very little benefit to starting a college visit by speed-walking across campus while a parent quietly calculates whether coffee counts as breakfast.
+
+### Check the University Event Calendar
+
+Even if you aren’t coming for a football game, check the [Auburn University events calendar](https://calendar.auburn.edu) to see what is happening that weekend.
+
+Large events can affect:
+
+- hotel availability
+- hotel rates
+- restaurant waits
+- traffic
+- parking
+
+A normal Auburn weekend and a major event weekend can feel like two entirely different towns.
+
+### Prepare for Heat and Humidity
+
+If your visit falls during the warmer part of the year, expect heat and humidity. A campus tour involves a fair amount of walking, and much of the value of the trip comes from continuing to explore afterward.
+
+Comfortable shoes and water are not particularly glamorous travel advice, but neither is being miserable by 11 a.m.
+
+## What to Notice Beyond the Campus Tour
+
+One theme came up more than almost anything else in the accounts I reviewed: **families noticed the people.**
+
+Parents and prospective students described current students talking to them, helping with directions or simply seeming happy to be there. Several families arrived without Auburn at the top of the list and left considerably more interested.
+
+Not every student will have that reaction, nor should they be expected to.
+
+The point of a college tour is not to convince your teenager to like Auburn. It is to give them enough information to decide whether they do.
+
+That is why I would spend some of your visit observing ordinary campus life. Are students interacting with each other? Does your student like the size of the campus? Can they imagine walking from a residence hall to class? Does downtown feel too small, too busy or about right?
+
+One parent whose account I reviewed preferred some of the facilities at another university, while their student still preferred Auburn. That distinction matters. The school that photographs best is not necessarily the school where your student wants to spend four years.
+
+## A 24-Hour College Tour Itinerary
+
+You do not need a complicated itinerary to get a good feel for Auburn.
+
+### The Day Before Your Tour
+
+!!!
+#### Late afternoon
+
+Arrive in Auburn and check into your hotel.
+
+Once you’re settled, walk through downtown and toward campus. If you’re staying nearby, this is a good opportunity to figure out where you need to be the next morning without the pressure of actually needing to be there.
+
+#### Dinner
+
+Have a sit-down dinner together. Acre or Hamilton’s would both work well.
+
+#### After dinner
+
+Walk around downtown for a little while. Keep this part easy. You have plenty of walking coming the next day.
+!!!
+
+### Campus Tour Day
+
+!!!
+#### Morning
+
+Eat breakfast and give yourself more buffer time than you think you need.
+Head to your Auburn University campus tour.
+
+#### Late morning
+
+If possible, schedule a visit with your student’s prospective college or academic department.
+
+#### Lunch
+
+Eat somewhere casual around campus or downtown.
+
+#### Early afternoon
+
+This is the time I would deliberately leave open. Walk campus again without the tour group. Visit the student center or bookstore. Go back to an academic building your student liked. Walk around downtown.
+
+#### Before you leave
+
+Stop at Toomer’s, get the lemonade, and give your student a little time to process the day before immediately asking them where Auburn now ranks on the spreadsheet.
+!!!
+
+## Is One Day Enough for a Campus Tour?
+
+For most families, **one night and most of the following day is enough for a first Auburn visit** if you plan it well.
+
+I would consider two nights if you’re flying in, have multiple academic visits scheduled, want to look more closely at housing or simply don’t want to squeeze a long travel day onto either end of the tour.
+
+If Auburn becomes one of your student’s final choices, I would also consider coming back.
+
+A first visit answers, “Do I like this place?”
+
+A second visit can answer much more specific questions about the degree program, housing, transportation, costs and what daily life might actually look like.
+
+## Planning Your College Visit
+
+A good Auburn college visit does not require filling every hour.
+
+Book the campus tour. Visit your student’s academic program if you can. Stay close enough to campus that getting around doesn’t become the focus of the trip. Eat somewhere good, walk downtown and leave some room for your student to experience Auburn without someone explaining Auburn to them.
+
+That last part may tell you more than anything else.
+
+I’ve lived in and around Auburn my entire life, graduated from Auburn, and now work as a travel advisor as I prepare to return to the university for graduate school. If you’re visiting from out of state, I can help you sort through the hotel and travel logistics. You do not need to have the entire trip figured out before reaching out.

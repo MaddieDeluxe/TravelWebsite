@@ -5,6 +5,10 @@ Summary: A short description that helps someone decide whether to read this arti
 Author: Madison Austin
 Image:
 Image Alt:
+Show Table of Contents: false
+CTA Title:
+CTA Description:
+CTA Button:
 Status: draft
 ---
 Start your article here. Separate paragraphs with a blank line.
