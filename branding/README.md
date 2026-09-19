@@ -13,7 +13,7 @@ The business card in assets/business-card.png is the visual reference.
 
 Display type: Georgia, with bold italic display lettering and rust shadows for the wordmark. Body and navigation use Arial. Both are system fonts; no font downloads or hosted webfonts are required.
 
-Style: misty mountain photography, monochrome vintage travel collage, warm paper, fine rectangular borders, yellow stationery accents. Both index.html and links.html share branding/css/colors.css. The earlier palette and logos are no longer referenced by either page.
+Style: misty mountain photography, monochrome vintage travel collage, warm paper, fine rectangular borders, yellow stationery accents. Both `index.html` and `links/index.html` share `branding/css/colors.css`. The earlier palette and logos are no longer referenced by either page.
 
 The supplied assets/mountain background.jpg is the background for both pages. Supplied PNGs in assets/vintage graphics form the responsive hero collage (plane, balloon), destination hand and paper-airplane accents, and Links page clover. Use supplied artwork; do not generate replacement imagery. Existing destination photos, business details, and booking links are retained.
 
