@@ -1,0 +1,83 @@
+TRAVEL NOTES RENDERER COMPONENTS
+
+Use these components in article text files inside notes/posts/. Run notes/build.cmd after editing to generate the article pages.
+
+ARTICLE HEADER
+Place these fields above a line containing ---.
+
+Required
+- Title: The article title.
+- Summary: A short article description.
+
+Optional
+- Order: Positive whole number; lower numbers appear first on the Notes overview.
+- Date: Publication date in YYYY-MM-DD format.
+- Updated: Revision date in YYYY-MM-DD format; cannot be earlier than Date.
+- Author: Defaults to Madison Austin.
+- Image: Path to a JPG, JPEG, PNG, WebP, or GIF within notes/images/.
+- Image Alt: Accessible description for the article image; defaults to the title.
+- Show Table of Contents: true or false; true lists all ## headings.
+- CTA Title: Replaces the default inquiry call-to-action title.
+- CTA Description: Replaces the default inquiry call-to-action description.
+- CTA Button: Replaces the default call-to-action button text.
+- Status: published (default) or draft. Drafts are not included in generated listings.
+
+BODY COMPONENTS
+
+Paragraph
+Write regular text. Leave a blank line between paragraphs.
+
+Headings
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+Each heading must occupy its own line. ## headings are included in the optional table of contents.
+
+Bulleted list
+- First item
+- Second item
+Keep list items together and leave a blank line before and after the list.
+
+Emphasis
+*italic text* or _italic text_
+**bold text** or __bold text__
+
+Link
+[Link label](https://example.com)
+Only HTTP and HTTPS URLs are supported. Links open in a new tab.
+
+Inline body image
+![Accessible description](notes/images/example.jpg)
+You may also use an HTTP or HTTPS image URL. The image must be on its own line, with blank lines around it. Local images must be JPG, JPEG, PNG, WebP, or GIF files within notes/images/.
+
+Toggle section
+Use a collapsible area for optional detail or a checklist. The opening marker must include a label; the closing marker is ??? on its own line.
+
+??? Questions to ask
+- Is airport transfer included?
+- What happens if plans change?
+???
+
+Panel section
+Use a visible, styled box for content that needs emphasis. The panel label is optional.
+
+!!! Travel tip
+Book accommodations with a flexible cancellation policy.
+!!!
+
+An unlabeled panel:
+
+!!!
+#### Morning
+
+Start with the campus tour.
+!!!
+
+COMPONENT RULES
+- Separate paragraphs, headings, lists, images, toggles, and panels with blank lines.
+- Components nested inside toggles and panels support the same paragraphs, headings, lists, links, emphasis, and inline images as the main body.
+- Unsupported Markdown and HTML are rendered as plain text.
+- Close every toggle with ??? and every panel with !!! on its own line.

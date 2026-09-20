@@ -1,0 +1,50 @@
+Title: Renderer Components Example
+Order: 999
+Date: 2026-09-20
+Updated: 2026-09-20
+Summary: A local-only sample article that demonstrates every Travel Notes renderer component.
+Author: Madison Austin
+Image: notes/images/total-solar-eclipse.png
+Image Alt: A total solar eclipse shown against a dark sky.
+Show Table of Contents: true
+CTA Title: Ready to plan a trip?
+CTA Description: I can help turn your travel ideas into a thoughtful itinerary.
+CTA Button: Start planning
+Status: draft
+---
+# Heading level 1
+
+This is a paragraph. It includes *italic text*, **bold text**, and a [sample link](https://example.com).
+
+## Heading level 2
+
+This level-two heading appears in the table of contents.
+
+### Heading level 3
+
+This paragraph demonstrates normal body copy below a level-three heading.
+
+#### Heading level 4
+
+This paragraph demonstrates normal body copy below a level-four heading.
+
+##### Heading level 5
+
+This paragraph demonstrates normal body copy below a level-five heading.
+
+###### Heading level 6
+
+This paragraph demonstrates normal body copy below a level-six heading.
+
+- First bulleted-list item
+- Second bulleted-list item
+
+![A total solar eclipse shown against a dark sky.](notes/images/total-solar-eclipse.png)
+
+??? A sample toggle
+This content stays hidden until a reader opens the toggle.
+???
+
+!!! A sample panel
+This content remains visible inside a styled panel.
+!!!
