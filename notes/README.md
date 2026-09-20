@@ -71,6 +71,23 @@ If possible, schedule a visit with your student’s prospective college or acade
 
 Add text after the opening marker, such as `!!! Travel tip`, when the panel itself needs a title. Panels render as elevated, non-collapsible boxes. Their contents support the same paragraphs, headings, lists, links, and emphasis as the rest of the article.
 
+### Photo carousels
+
+Use a carousel for two or more local images. Open it with `:::carousel` and close it with `:::` on their own lines. Each image needs an `Image:` path inside `notes/images/` and an `Alt:` description. `Caption:` is optional. Keep your images the same size for a uniform display.
+
+```text
+:::carousel
+Image: notes/images/hotel-lobby.jpg
+Alt: A bright hotel lobby with tropical plants.
+Caption: The lobby at check-in.
+
+Image: notes/images/pool.jpg
+Alt: A resort pool surrounded by palm trees.
+:::
+```
+
+The carousel displays as a scrollable image row without JavaScript. When JavaScript is available, it advances every five seconds and adds previous/next controls, image dots, and left/right keyboard navigation. Automatic movement pauses while a reader is hovering over or using the carousel, and it is disabled for readers who prefer reduced motion.
+
 ## Drafts and removal
 
 Keep `Status: draft` to hide a post, or move its source file out of `notes/posts/`. After changing publication status or removing an article source, rebuild and publish the resulting changes, including deleted generated HTML files. The builder removes only obsolete article pages bearing its own generated-file marker; it preserves your text files.

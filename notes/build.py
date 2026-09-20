@@ -165,6 +165,64 @@ def render_standard_blocks(text, headings=None, used_ids=None):
     return '\n'.join(output)
 
 
+def render_carousel(lines):
+    """Render a local-image carousel declared between :::carousel markers."""
+    slides = []
+    slide = {}
+    for line in lines:
+        if not line.strip():
+            continue
+        key, separator, value = line.partition(':')
+        if not separator or key not in ('Image', 'Alt', 'Caption'):
+            raise ValueError('carousel entries must use Image:, Alt:, and optional Caption: lines')
+        value = value.strip()
+        if not value:
+            raise ValueError(f'carousel {key} cannot be blank')
+        if key == 'Image':
+            if slide:
+                if 'Image' not in slide or 'Alt' not in slide:
+                    raise ValueError('each carousel image needs an Image: and Alt: line')
+                slides.append(slide)
+                slide = {}
+            slide['Image'] = value
+        elif key in slide:
+            raise ValueError(f'duplicate carousel {key} line')
+        else:
+            slide[key] = value
+    if slide:
+        if 'Image' not in slide or 'Alt' not in slide:
+            raise ValueError('each carousel image needs an Image: and Alt: line')
+        slides.append(slide)
+    if len(slides) < 2:
+        raise ValueError('a carousel needs at least two images')
+    figures = []
+    for index, slide in enumerate(slides, start=1):
+        image_path = slide['Image'].replace('\\', '/').removeprefix('/')
+        if image_path.startswith('notes/'):
+            image_path = image_path[len('notes/'):]
+        parts = image_path.split('/')
+        image_file = Path(__file__).resolve().parent.joinpath(*parts)
+        if parts[0] != 'images' or any(part in ('', '.', '..') for part in parts):
+            raise ValueError('carousel Image must be a path inside notes/images')
+        if not image_file.is_file():
+            raise ValueError(f'carousel image file does not exist: notes/{image_path}')
+        if image_file.suffix.lower() not in ('.jpg', '.jpeg', '.png', '.webp', '.gif'):
+            raise ValueError('carousel Image must be a JPG, PNG, WebP, or GIF file')
+        caption = f'<figcaption>{render_inline(slide["Caption"])}</figcaption>' if slide.get('Caption') else ''
+        figures.append(f'<figure class="note-carousel-slide" aria-label="Image {index} of {len(slides)}">'
+                       f'<img src="/notes/{quote(image_path, safe="/")}" alt="{escape(slide["Alt"], quote=True)}" decoding="async">'
+                       f'{caption}</figure>')
+    dots = ''.join(f'<button type="button" class="note-carousel-dot" aria-label="Go to image {index}" '
+                   f'aria-current="{"true" if index == 1 else "false"}"></button>'
+                   for index in range(1, len(slides) + 1))
+    return ('<section class="note-carousel" aria-roledescription="carousel" aria-label="Photo carousel">'
+            '<div class="note-carousel-stage"><div class="note-carousel-viewport" tabindex="0">' + ''.join(figures) + '</div>'
+            '<button type="button" class="note-carousel-previous" aria-label="Previous image"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>'
+            '<button type="button" class="note-carousel-next" aria-label="Next image"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>'
+            f'<div class="note-carousel-dots" aria-label="Choose an image">{dots}</div></div>'
+            f'<span class="visually-hidden note-carousel-status" aria-live="polite">Image 1 of {len(slides)}</span></section>')
+
+
 def render_body(text):
     """Render article text, including optional disclosure and panel sections.
 
@@ -178,6 +236,9 @@ def render_body(text):
     toggle_body = []
     panel_label = None
     panel_body = []
+    carousel_body = []
+    carousel_open = False
+    has_carousel = False
     headings = []
     used_ids = set()
 
@@ -190,7 +251,18 @@ def render_body(text):
             ordinary.clear()
 
     for line in text.splitlines():
-        if toggle_label is None and panel_label is None and line.startswith('??? '):
+        if not carousel_open and toggle_label is None and panel_label is None and line.strip() == ':::carousel':
+            render_ordinary()
+            carousel_open = True
+            carousel_body = []
+        elif carousel_open and line.strip() == ':::':
+            output.append(render_carousel(carousel_body))
+            carousel_open = False
+            carousel_body = []
+            has_carousel = True
+        elif carousel_open:
+            carousel_body.append(line)
+        elif toggle_label is None and panel_label is None and line.startswith('??? '):
             render_ordinary()
             toggle_label = line[4:].strip()
             if not toggle_label:
@@ -235,8 +307,10 @@ def render_body(text):
         raise ValueError('close each toggle section with ??? on its own line')
     if panel_label is not None:
         raise ValueError('close each panel section with !!! on its own line')
+    if carousel_open:
+        raise ValueError('close each carousel with ::: on its own line')
     render_ordinary()
-    return '\n'.join(part for part in output if part), headings
+    return '\n'.join(part for part in output if part), headings, has_carousel
 
 
 def table_of_contents(headings):
@@ -344,7 +418,7 @@ def build(root):
         cta_button = escape(post.get('CTA Button') or 'Start your travel inquiry')
         article_image = (f'<img class="note-image" src="{escape(post["image_path"])}" '
                          f'alt="{escape(post["image_alt"])}" decoding="async">' if post['image_url'] else '')
-        body, headings = render_body(post['body'])
+        body, headings, has_carousel = render_body(post['body'])
         toc = table_of_contents(headings) if post['show_toc'] else ''
         content = ('<article class="note-article" id="article-top"><nav class="note-breadcrumbs" aria-label="Breadcrumb">'
                    '<a href="/">Home</a> <span aria-hidden="true">/</span> <a href="/notes/">Travel Notes</a>'
@@ -365,10 +439,13 @@ def build(root):
                    '<span class="arrow-icon" aria-hidden="true"></span></a></aside></article>'
                    '<a class="note-back-to-top" href="#article-top" hidden>'
                    'Return to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>')
+        article_scripts = '<script src="/notes/share.js" defer></script>\n'
+        if has_carousel:
+            article_scripts += '<script src="/notes/carousel.js" defer></script>\n'
         outputs[root / 'note' / post['slug'] / 'index.html'] = page(template, post['Title'] + ' | Your Lucky Day', post['Summary'],
                                                         'https://yourluckyday.travel' + route, content, post['Author'], 'article', post).replace(
                                                             '  </head>', article_metadata(post, 'https://yourluckyday.travel' + route)
-                                                            + '<script src="/notes/share.js" defer></script>\n  </head>')
+                                                            + article_scripts + '  </head>')
         published = post['date'].isoformat() if post['date'] else ''
         card_author = escape(post['Author'])
         card_date = ''

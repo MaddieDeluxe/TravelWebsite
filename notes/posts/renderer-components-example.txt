@@ -41,6 +41,24 @@ This paragraph demonstrates normal body copy below a level-six heading.
 
 ![A total solar eclipse shown against a dark sky.](notes/images/total-solar-eclipse.png)
 
+:::carousel
+Image: notes/images/new-york/observation-deck-carousel/empire-state-building-selfie.png
+Alt: Madison taking a selfie at the Empire State Building observation deck.
+Caption: Empire State Building observation deck.
+
+Image: notes/images/new-york/observation-deck-carousel/empire-state-building-view.png
+Alt: The view across New York City from the Empire State Building observation deck.
+Caption: The view from the Empire State Building.
+
+Image: notes/images/new-york/observation-deck-carousel/summit-one-from-empire-state-building.png
+Alt: SUMMIT One Vanderbilt viewed from the Empire State Building.
+Caption: SUMMIT One Vanderbilt from the Empire State Building.
+
+Image: notes/images/new-york/observation-deck-carousel/summit-one.png
+Alt: The mirrored interior of SUMMIT One Vanderbilt.
+Caption: Inside SUMMIT One Vanderbilt.
+:::
+
 ??? A sample toggle
 This content stays hidden until a reader opens the toggle.
 ???
