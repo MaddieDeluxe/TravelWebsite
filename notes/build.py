@@ -435,7 +435,7 @@ def build(root):
                    '<aside class="note-inquiry" aria-labelledby="note-inquiry-heading">'
                    f'<h2 id="note-inquiry-heading">{cta_title}</h2>'
                    f'<p>{cta_description}</p>'
-                   f'<a class="btn btn-brand-primary" href="/inquiry/">{cta_button} '
+                   f'<a class="btn btn-brand-primary" href="https://secure.foratravel.com/intake/SJvaVFpVIX" target="_blank" rel="noopener noreferrer">{cta_button} '
                    '<span class="arrow-icon" aria-hidden="true"></span></a></aside></article>'
                    '<a class="note-back-to-top" href="#article-top" hidden>'
                    'Return to top <i class="fa-solid fa-arrow-up" aria-hidden="true"></i></a>')

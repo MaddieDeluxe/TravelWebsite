@@ -44,7 +44,7 @@ CTA Description: I can help you choose a convenient hotel and work out the trave
 CTA Button: Plan your Auburn trip
 ```
 
-Each field is optional. A blank or omitted field uses the shared default. The button continues to link to `/inquiry/`.
+Each field is optional. A blank or omitted field uses the shared default. The button always links directly to the [travel inquiry form](https://secure.foratravel.com/intake/SJvaVFpVIX). The standalone inquiry page is reserved for direct sharing; do not link to it from the website or include it in a sitemap.
 
 ### Optional toggle sections
 
